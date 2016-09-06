@@ -1,2 +1,10 @@
 ---
-# defaults file for ansible-role-aws-ec2
+aws_ec2_provision: False
+aws_instance_name: 'ansible-internal-sites-test'
+aws_instance_type: t2.micro
+aws_volume_size: 120
+aws_region: eu-west-1
+aws_subnet_id: subnet-db126a82
+aws_security_group: default
+aws_image_AMI: 'ami-7abd0209'
+aws_public_key_name: internal-sites-key
