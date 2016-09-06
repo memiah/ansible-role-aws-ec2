@@ -1,0 +1,16 @@
+---
+galaxy_info:
+  author: memiah
+  description: Add automatic EC2 instance provisioning via Ansible.
+  company: "Memiah Limited"
+  license: "license (BSD, MIT)"
+  min_ansible_version: 2.1
+  platforms:
+  - name: EL
+    versions:
+    - 7
+  galaxy_tags:
+    - aws
+    - ec2
+dependencies: []
+allow_duplicates: yes
