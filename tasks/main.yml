@@ -12,9 +12,9 @@
       Name: "{{ aws_instance_name }}"
     instance_type: "{{ aws_instance_type }}"
     volumes:
-      - device_name: /dev/sda1
+      - device_name: "{{ aws_default_mount_name }}"
         volume_type: gp2
-        volume_size: 256
+        volume_size: "{{ aws_volume_size }}"
         delete_on_termination: true
     region: "{{ aws_region }}"
     group: "{{ aws_security_group }}"

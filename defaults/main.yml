@@ -8,3 +8,5 @@ aws_subnet_id: subnet-db126a82
 aws_security_group: default
 aws_image_AMI: 'ami-7abd0209'
 aws_public_key_name: internal-sites-key
+
+aws_default_mount_name: /dev/sda1
