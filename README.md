@@ -48,7 +48,9 @@ First playbook declaration should be `local` host with `vm` only in role.
 Declaring the hosts template
 ----------------------------
 You can declare multiple instances and define which roles you want to provision in each VM. You **must** declare all roles you want to perform in the main playbook (example above) with `when: "{{ 'rolename' in role.split(',') }}" }` condition.
-Normally you would like to declare it in *vars/main.yml*.
+
+
+Normally you would like to declare it in **vars/main.yml**.
 
 ```
 aws_hosts:
@@ -75,7 +77,8 @@ aws_hosts:
 ```
 
 `extra_vars` will be passed as raw extra variables in the dynamic-defined new host (in tasks/main, role name `Set the new host inventory`).
-If you need different extra_vars for each VM of the same instance, you should declare that instance multiple times instead of rising `instances` number.
+
+If you need different *extra_vars* for each VM of the same instance, **you should declare that instance multiple times** instead of rising `instances` number.
 
 
 How to run
@@ -84,7 +87,7 @@ How to run
 ansible-playbook playbooks/aws_instance.yml --ask-vault-pass -i inventories/staging -vvv
 ```
 
-Assuming that aws playbook name is `aws_instance.yml`
+Assuming that AWS playbook name is `aws_instance.yml`
 
 License
 -------
