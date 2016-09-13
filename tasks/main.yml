@@ -41,8 +41,8 @@
   with_items: "{{ aws_hosts }}"
   when:
     - aws_hosts is defined
-    - (aws_access_key is defined) and (aws_secret_key is defined)
-    - (aws_ec2_provision is defined) and (aws_ec2_provision == True)
+    - (aws_access_key is defined and aws_secret_key is defined)
+    - (aws_ec2_provision is defined and aws_ec2_provision == True)
 
 - set_fact:
     ec2_results: "{{ ec2_result.results | map(attribute='tagged_instances') | list }}"
