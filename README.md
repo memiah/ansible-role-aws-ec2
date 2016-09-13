@@ -45,6 +45,55 @@ Example Playbook
 
 First playbook declaration should be `local` host with `vm` only in role. In the second one you should set the `hosts` with your current inventory name.
 
+Implementing aws-ec2 role to new projects
+-----------------------------------------
+
+In order to prevent the provisioning to the servers declared into the current inventory file, you should exclude the main groups to the second playbook role. If we take (for example) the bizdir project, the `hosts` line in the second playbook role will be:
+
+```
+- name: Start provisioning on new EC2 instances.
+     hosts: staging:!local:!webservers:!databases
+     become: yes
+   ...
+```
+
+You also must add `local ansible_connection=local` declaration inside the main group(s) into the current inventory file. Following two examples, one for devops-internal-sites project and one for devops-bizdir respectively.
+
+```
+[staging]
+local ansible_connection=local ansible_python_interpreter=/usr/bin/python
+
+[all:vars]
+aws_instance_name='internal-sites-staging-test'
+memiah_subdomain_prefix='staging-'
+bizdir_database_host='10.0.0.207'
+filesystem_s3_backup_bucket='memiah-internal-sites/filesystem-backups'
+filesystem_backup_enabled=False
+filesystem_restore_enabled=True
+```
+
+```
+[staging-webservers]
+local ansible_connection=local
+ec2-52-17-250-117.eu-west-1.compute.amazonaws.com ansible_host=52.17.250.117 private_ip=10.0.0.203 server_density_agent_key=71865781015a009c7ff40bc4559302f8 memiah_wordpress_host=False
+
+[staging-databases]
+local ansible_connection=local
+ec2-52-16-157-36.eu-west-1.compute.amazonaws.com ansible_host=52.16.157.36 private_ip=10.0.0.207 database_master=True server_density_agent_key=d288e0930b86c2dcf591ecf419e3f6d3
+
+[webservers:children]
+staging-webservers
+
+[databases:children]
+staging-databases
+
+[staging:children]
+webservers
+databases
+
+...
+```
+
 Declaring hosts templates
 -------------------------
 A full example can be found in `defaults/main.example.yml`. In `vars/main` of your local project should be declared the `aws_hosts` var (and must be a dictionary).
