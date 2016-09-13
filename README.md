@@ -75,6 +75,12 @@ aws_hosts:
        - database
 ```
 
+How to run
+----------
+```ansible-playbook playbooks/aws_instance.yml --ask-vault-pass -i inventories/staging -vvv```
+
+Assuming that the aws playbook name is `aws_instance.yml`
+
 License
 -------
 
