@@ -43,6 +43,8 @@ Example Playbook
        - { role: database, when: "{{ 'database' in rol.split(',') }}" }
 ```
 
+First playbook declaration should be `local` host with `vm` only in role. In the second one you should set the `hosts` with your current inventory name.
+
 Declaring hosts templates
 -------------------------
 A full example can be found in `defaults/main.example.yml`. In `vars/main` of your local project should be declared the `aws_hosts` var (and must be a dictionary).
