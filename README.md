@@ -48,6 +48,7 @@ First playbook declaration should be `local` host with `vm` only in role.
 Declaring the hosts template
 ----------------------------
 You can declare multiple instances and define which roles you want to provision in each VM. You **must** declare all roles you want to perform in the main playbook (example above) with `when: "{{ 'rolename' in role.split(',') }}" }` condition.
+Normally you would like to declare it in *vars/main.yml*.
 
 ```
 aws_hosts:
