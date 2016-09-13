@@ -22,12 +22,12 @@
     aws_access_key: "{{ aws_access_key }}"
     aws_secret_key: "{{ aws_secret_key }}"
     instance_tags:
-      Name: "{{ item.aws_instance_name }}"
+      Name: "{{ item.aws_instance_name }}{{ '-' + inventory if aws_inventory_tag == True }}"
       Prefix: "{{ item.aws_roles|join(',') }}"
     instance_type: "{{ item.aws_instance_type }}"
     exact_count: "{{ item.aws_instances }}"
     count_tag:
-      Name: "{{ item.aws_instance_name }}"
+      Name: "{{ item.aws_instance_name }}{{ '-' + inventory if aws_inventory_tag == True }}"
       Prefix: "{{ item.aws_roles|join(',') }}"
     volumes: "{{ item.aws_volumes }}"
     region: "{{ item.aws_region }}"
