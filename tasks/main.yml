@@ -26,6 +26,7 @@
     image: "{{ item.image_AMI|default(__aws_image_AMI) }}"
     assign_public_ip: yes
     vpc_subnet_id: "{{ item.subnet_id|default(__aws_subnet_id) }}"
+    private_ip: "{{ item.private_ip|default(__aws_private_IP) }}"
     key_name: "{{ item.public_key_name|default(__aws_public_key_name) }}"
     wait: true
   register: ec2_result
