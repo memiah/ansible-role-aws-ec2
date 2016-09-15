@@ -27,7 +27,7 @@ Example Playbook
        - ../vars/vault.secrets.yml
        - ../vars/config.yml
      roles:
-       - vm
+       - ansible-role-aws-ec2
 
    - name: Start provisioning on new EC2 instances.
      hosts: all:!local
@@ -43,21 +43,18 @@ Example Playbook
        - { role: database, when: "{{ 'database' in role.split(',') }}" }
 ```
 
-First playbook declaration should be `local` host with `vm` only in role.
+First playbook declaration should be `local` host with `ansible-role-aws-ec2` only in role.
 
 Declaring the hosts template
 ----------------------------
 You can declare multiple instances and define which roles you want to provision in each VM. You **must** declare all roles you want to perform in the main playbook (example above) with `when: "{{ 'rolename' in role.split(',') }}" }` condition.
 
 
-Normally you would like to declare it in **vars/main.yml**.
-
 ```
 aws_hosts:
   - instances: 1
     instance_prefix: 'webserver'
 
-    volumes: "{{ aws_volumes }}"    # Just get the default volume
     extra_vars: 'private_ip=10.0.0.203 server_density_agent_key=71865781015a009c7ff40bc4559302f8 memiah_wordpress_host=False'
     roles:
       - webserver
@@ -76,10 +73,11 @@ aws_hosts:
       - database
 ```
 
+Normally, you want to declare it in **vars/main.yml**.
 `extra_vars` will be passed as raw extra variables in the dynamic-defined new host (in tasks/main, role name `Set the new host inventory`).
 
 If you need different *extra_vars* for each VM of the same instance, **you should declare that instance multiple times** instead of rising `instances` number.
-
+A You can find a full list of available variables in **defaults/main.yml**.
 
 How to run
 ----------
