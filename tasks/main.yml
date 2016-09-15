@@ -20,7 +20,7 @@
       Name: "{{ environment_name }}{{ '-' + item.instance_prefix if item.instance_prefix != '' else '' }}{{ '-' + enviroment_prefix if enviroment_prefix != '' else '' }}"
       Role: "{{ item.roles|join(',') }}"
       Vars: "{{ item.extra_vars }}"
-    volumes: "{{ item.volumes }}"
+    volumes: "{{ item.volumes|default(__aws_volumes) }}"
     region: "{{ item.region|default(__aws_region) }}"
     group: "{{ item.security_group|default(__aws_security_group) }}"
     image: "{{ item.image_AMI|default(__aws_image_AMI) }}"
