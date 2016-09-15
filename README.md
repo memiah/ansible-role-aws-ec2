@@ -45,6 +45,20 @@ Example Playbook
 
 First playbook declaration should be `local` host with `ansible-role-aws-ec2` only in role.
 
+Example inventory
+-----------------
+
+```
+[local]
+local ansible_connection=local
+
+[staging:children]
+local
+
+[another-inventory-group:children]
+staging
+```
+
 Declaring the hosts template
 ----------------------------
 You can declare multiple instances and define which roles you want to provision in each VM. You **must** declare all roles you want to perform in the main playbook (example above) with `when: "{{ 'rolename' in role.split(',') }}" }` condition.
