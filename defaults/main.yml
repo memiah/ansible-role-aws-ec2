@@ -1,13 +1,16 @@
 ---
+environment_name: 'env-name'
+enviroment_prefix: ''
+
 __aws_instance_type: t2.large
 
-__aws_region: eu-west-1
-__aws_subnet_id: subnet-db126a82
+__aws_region:
+__aws_subnet_id: subnet-default
 
-__aws_security_group: ansible-ec2-test
-__aws_public_key_name: ben-public-key
+__aws_security_group:
+__aws_public_key_name:
 
-__aws_image_AMI: ami-7abd0209
+__aws_image_AMI: ami-default
 __aws_private_IP:
 
 __aws_volumes:
