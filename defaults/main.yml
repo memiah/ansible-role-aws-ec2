@@ -1,10 +1,10 @@
 ---
 environment_name: 'env-name'
-enviroment_prefix: ''
+enviroment_prefix: 'prefix'
 
 __aws_instance_type: t2.large
 
-__aws_region:
+__aws_region: eu-west-1
 __aws_subnet_id: subnet-default
 
 __aws_security_group:
