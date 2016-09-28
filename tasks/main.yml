@@ -13,7 +13,7 @@
     instance_tags:
       Name: "{{ environment_name }}{{ '-' + item.instance_prefix if item.instance_prefix != '' else '' }}{{ '-' + enviroment_prefix if enviroment_prefix != '' else '' }}"
       Role: "{{ item.roles|join(',') }}"
-      Vars: "{{ item.extra_vars | to_json }}"
+      Vars: "{{ (item.extra_vars | to_json) | default(__aws_extra_vars) }}"
     instance_type: "{{ item.instance_type|default(__aws_instance_type) }}"
     exact_count: "{{ item.instances }}"
     count_tag:

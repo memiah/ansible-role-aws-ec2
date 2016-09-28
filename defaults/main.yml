@@ -16,3 +16,5 @@ __aws_private_IP:
 __aws_volumes:
   - device_name: /dev/sda1
     volume_type: gp2
+
+__aws_extra_vars:
