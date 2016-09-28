@@ -11,15 +11,14 @@
     aws_access_key: "{{ aws_access_key }}"
     aws_secret_key: "{{ aws_secret_key }}"
     instance_tags:
-      Name: "{{ environment_name }}{{ '-' + item.instance_prefix if item.instance_prefix != '' else '' }}{{ '-' + enviroment_prefix if enviroment_prefix != '' else '' }}"
-      Role: "{{ item.roles|join(',') }}"
-      Vars: "{{ item.extra_vars }}"
+        Name: "{{ environment_name }}{{ '-' + item.instance_prefix if item.instance_prefix != '' else '' }}{{ '-' + enviroment_prefix if enviroment_prefix != '' else '' }}",
+        Role: "{{ item.roles|join(',') }}"
+        Vars: "{{ item.extra_vars | to_json }}"
     instance_type: "{{ item.instance_type|default(__aws_instance_type) }}"
     exact_count: "{{ item.instances }}"
     count_tag:
       Name: "{{ environment_name }}{{ '-' + item.instance_prefix if item.instance_prefix != '' else '' }}{{ '-' + enviroment_prefix if enviroment_prefix != '' else '' }}"
       Role: "{{ item.roles|join(',') }}"
-      Vars: "{{ item.extra_vars }}"
     volumes: "{{ item.volumes|default(__aws_volumes) }}"
     region: "{{ item.region|default(__aws_region) }}"
     group: "{{ item.security_group|default(__aws_security_group) }}"
@@ -30,7 +29,8 @@
     key_name: "{{ item.public_key_name|default(__aws_public_key_name) }}"
     wait: true
   register: ec2_result
-  with_items: "{{ aws_hosts }}"
+  with_items:
+    - "{{ aws_hosts }}"
   when:
     - aws_hosts is defined
     - (aws_access_key is defined and aws_secret_key is defined)
@@ -41,7 +41,7 @@
   when:
     - ec2_result is defined
 
-- debug: var=ec2_result
+#- debug: var=ec2_result
 - debug: var=ec2_results
 
 - name: Set the new host inventory
@@ -51,7 +51,7 @@
             groupname="{{ inventory }}"
             role="{{ item.tags.Role }}"
             private_ip="{{ item.private_ip }}"
-            {{ item.tags.Vars }}
+            vars="{{ item.tags.Vars | from_json }}"
   with_items: "{{ ec2_results }}"
   when:
     - ec2_results is defined
@@ -63,6 +63,10 @@
   with_items: "{{ ec2_results }}"
   when:
     - ec2_results is defined
+
+- debug: msg="{{ hostvars[item] }}"
+  with_items: "{{ groups['databases'] }}"
+  when: item != 'local'
 
 - debug: var=wait_result
 - debug: msg={{ item }}
