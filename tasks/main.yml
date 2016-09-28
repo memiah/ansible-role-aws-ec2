@@ -11,9 +11,9 @@
     aws_access_key: "{{ aws_access_key }}"
     aws_secret_key: "{{ aws_secret_key }}"
     instance_tags:
-        Name: "{{ environment_name }}{{ '-' + item.instance_prefix if item.instance_prefix != '' else '' }}{{ '-' + enviroment_prefix if enviroment_prefix != '' else '' }}",
-        Role: "{{ item.roles|join(',') }}"
-        Vars: "{{ item.extra_vars | to_json }}"
+      Name: "{{ environment_name }}{{ '-' + item.instance_prefix if item.instance_prefix != '' else '' }}{{ '-' + enviroment_prefix if enviroment_prefix != '' else '' }}"
+      Role: "{{ item.roles|join(',') }}"
+      Vars: "{{ item.extra_vars | to_json }}"
     instance_type: "{{ item.instance_type|default(__aws_instance_type) }}"
     exact_count: "{{ item.instances }}"
     count_tag:
