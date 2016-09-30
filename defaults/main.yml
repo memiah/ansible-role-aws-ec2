@@ -18,3 +18,4 @@ __aws_volumes:
     volume_type: gp2
 
 __aws_extra_vars:
+aws_tags_check: False

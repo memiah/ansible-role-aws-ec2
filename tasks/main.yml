@@ -7,6 +7,42 @@
 
 - debug: msg="Loading {{ inventory }} inventory"
 
+
+- name: Get remote instances list
+  ec2_remote_facts:
+    filters:
+      "tag:Name": "{{ environment_name }}{{ '-' + item.instance_prefix if item.instance_prefix != '' else '' }}{{ '-' + enviroment_prefix if enviroment_prefix != '' else '' }}"
+    region: "{{ item.region }}"
+  with_items:
+    - "{{ aws_hosts }}"
+  register: ec2_hosts_list
+  when:
+    - aws_tags_check is defined
+
+- set_fact:
+    ec2_hosts_list: "{{ ec2_hosts_list.results }}"
+  when:
+    - ec2_hosts_list.results is defined
+#
+#- debug: msg="{{ item.instances[0] }}"
+#  with_items: "{{ ec2_hosts_list }}"
+
+- name: Update the tag if needed
+  ec2_tag:
+    region: "{{ item[0].instances[0].region }}"
+    resource: "{{ item[0].instances[0].id }}"
+    state: present
+    tags:
+      Vars: "{{ item[1].extra_vars | to_json }}"
+  with_nested:
+    - ec2_hosts_list
+    - aws_hosts
+  when:
+    - (aws_tags_check is defined) and (aws_tags_check == True) and (ec2_hosts_list.results is defined)
+    - (item[0].instances[0].tags.Vars is not defined) or ((item[1].extra_vars | to_json) != item[0].instances[0].tags.Vars)
+    - item[0].instances[0].tags.Name == "{{ environment_name }}{{ '-' + item[1].instance_prefix if item[1].instance_prefix != '' else '' }}{{ '-' + enviroment_prefix if enviroment_prefix != '' else '' }}"
+
+
 - ec2:
     aws_access_key: "{{ aws_access_key }}"
     aws_secret_key: "{{ aws_secret_key }}"
