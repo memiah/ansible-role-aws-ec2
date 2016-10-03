@@ -87,7 +87,7 @@
             groupname="{{ inventory }}"
             role="{{ item.tags.Role }}"
             private_ip="{{ item.private_ip }}"
-            vars="{{ item.tags.Vars | from_json }}"
+            vars="{{ item.tags.Vars }}"
   with_items: "{{ ec2_results }}"
   when:
     - ec2_results is defined
