@@ -2,6 +2,8 @@
 environment_name: 'env-name'
 enviroment_prefix: 'prefix'
 
+aws_tags_check: False
+
 __aws_instance_type: t2.large
 
 __aws_region: eu-west-1
@@ -18,4 +20,3 @@ __aws_volumes:
     volume_type: gp2
 
 __aws_extra_vars:
-aws_tags_check: False
