@@ -77,6 +77,9 @@ You can declare multiple instances and define which roles you want to provision 
 aws_hosts:
   - instances: 1
     instance_prefix: 'webserver'
+    
+    security_group: default
+    public_key_name: default
 
     extra_vars: 'example_var=true'
     roles:
@@ -107,23 +110,29 @@ Defaults variables
 ------------------
 
 ```
-   __aws_instance_type: t2.large
-   
-   __aws_region: eu-west-1
-   __aws_subnet_id: subnet-default
-   
-   __aws_security_group: default
-   __aws_public_key_name: public-key
-   
-   __aws_image_AMI: ami-default
-   __aws_private_IP:
-   
-   __aws_volumes:
-     - device_name: /dev/sda1
-       volume_type: gp2
+  environment_name: 'env-name'
+  enviroment_prefix: 'prefix'
+  
+  __aws_instance_type: t2.large
+  
+  __aws_region: eu-west-1
+  __aws_subnet_id: subnet-default
+  
+  __aws_security_group:
+  __aws_public_key_name:
+  
+  __aws_image_AMI: ami-default
+  __aws_private_IP:
+  
+  __aws_volumes:
+    - device_name: /dev/sda1
+      volume_type: gp2
+  
+  __aws_extra_vars:
+  aws_tags_check: False
 ```
 
-All of these vars can be used in the hosts declaration (`aws_hosts` var) for each instance you'll create. Make sure you omit the '_\_aws\_' prefix.
+All of these vars can be used in the hosts declaration (`aws_hosts` var) for each instance you'll create. Make sure you omit the '_\_aws\_' prefix if exsists.
 
 Role variables
 --------------
@@ -139,6 +148,12 @@ enviroment_prefix: 'test'
 ```
 
 An optional prefix that will be put right after the `enviroment_name`
+
+```
+aws_tags_check: False
+```
+
+This tag enable consistency-test for `Vars` EC2 tag. If that tag doesn't exists on destination instance or is different from the one that would be generated from this Ansible script, it will re-write it.
 
 ```
 aws_hosts:
@@ -159,7 +174,7 @@ Instances variables
 instances: 1
 ```
 
-How many instances of the *same type* you want to run. AWS will recognize automatically the *same type* instances by comparing the Tags. *Mandatory*
+How many instances of the *same type* you want to run. EC2 will recognize automatically instances by comparing the Tags. *Mandatory*
 
 
 ```
@@ -181,7 +196,7 @@ region: eu-west-1
 ```
 
 Where you want to deploy your instance(s). 
-Full available regions list [here](http://docs.aws.amazon.com/general/latest/gr/rande.html#ec2_region).
+Full available regions list available [here](http://docs.aws.amazon.com/general/latest/gr/rande.html#ec2_region).
 
 
 ```
@@ -232,10 +247,30 @@ volumes:
 
 `volumes` is a list of volumes you want to create with the instance. It follows exactly the same structure as the homonym [Ansible EC2 module](http://docs.ansible.com/ansible/ec2_module.html#options) variable.
 
+
+```
+extra_vars:
+    foo: 'baz'
+    another_custom_var: 'True'
+    full_name: 'John Doe'
+```
+
+The `extra_vars` are custom variables you can pass to the Ansible role. All of these variables are then passed as Host vars and they will be available to your tasks eventually.
+Following an example:
+
+```
+- name: Set system users
+  user: name="{{ hostvars[item].vars.foo }}" comment="{{ hostvars[item].vars.full_name }}" uid=1040 group=admin
+  when:
+    - item != 'local'
+    - hostvars[item].vars.foo is defined
+  with_items: "{{ groups['databases'] | default([]) }}"
+```
+
 How to run
 ----------
 ```
-ansible-playbook playbooks/aws_instance.yml --ask-vault-pass -i inventories/staging -vvv
+ansible-playbook playbooks/aws_instance.yml --ask-vault-pass -i inventories/staging
 ```
 
 Assuming that AWS playbook name is `aws_instance.yml`
