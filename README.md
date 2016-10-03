@@ -196,7 +196,7 @@ region: eu-west-1
 ```
 
 Where you want to deploy your instance(s). 
-Full available regions list available [here](http://docs.aws.amazon.com/general/latest/gr/rande.html#ec2_region).
+Full AWS regions list available [here](http://docs.aws.amazon.com/general/latest/gr/rande.html#ec2_region).
 
 
 ```
