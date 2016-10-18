@@ -43,7 +43,8 @@
     - item[0].instances[0].tags.Name == "{{ environment_name }}{{ '-' + item[1].instance_prefix if item[1].instance_prefix != '' else '' }}{{ '-' + enviroment_prefix if enviroment_prefix != '' else '' }}"
 
 
-- ec2:
+- name: Creating or recalling pre-existing instance(s)
+  ec2:
     aws_access_key: "{{ aws_access_key }}"
     aws_secret_key: "{{ aws_secret_key }}"
     instance_tags:
@@ -79,6 +80,9 @@
 
 #- debug: var=ec2_result
 - debug: var=ec2_results
+  when:
+    - aws_debug_on is defined
+    - aws_debug_on == True
 
 - name: Set the new host inventory
   add_host: hostname="{{ item.public_dns_name }}"
@@ -105,5 +109,12 @@
   when: item != 'local'
 
 - debug: var=wait_result
+  when:
+    - aws_debug_on is defined
+    - aws_debug_on == True
+
 - debug: msg={{ item }}
   with_inventory_hostnames: all
+  when:
+    - aws_debug_on is defined
+    - aws_debug_on == True

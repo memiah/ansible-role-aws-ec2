@@ -3,6 +3,7 @@ environment_name: 'env-name'
 enviroment_prefix: 'prefix'
 
 aws_tags_check: False
+aws_debug_on: False
 
 __aws_instance_type: t2.large
 
